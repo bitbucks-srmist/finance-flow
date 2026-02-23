@@ -1,26 +1,213 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --fintech-purple-950: #0a0820;
+  --fintech-purple-900: #0f0c30;
+  --fintech-purple-800: #1a1545;
+  --fintech-purple-700: #1E1B4B;
+  --fintech-purple-600: #2d2a6e;
+  --fintech-purple-500: #3d3a8f;
+  --fintech-purple-400: #5753b5;
+  --cyber-cyan-600: #0090cc;
+  --cyber-cyan-500: #00b8f5;
+  --cyber-cyan-400: #00D4FF;
+  --cyber-cyan-300: #40e0ff;
+  --gold-pulse-600: #b89900;
+  --gold-pulse-500: #d4b200;
+  --gold-pulse-400: #FFD700;
+  --gold-pulse-300: #ffe640;
+  --glass-bg: rgba(30, 27, 75, 0.6);
+  --glass-border: rgba(0, 212, 255, 0.2);
+  --glass-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+  --text-primary: #f0f0ff;
+  --text-secondary: rgba(220, 220, 255, 0.7);
+  --background: #0a0820;
+  --foreground: #f0f0ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --color-purple-950: var(--fintech-purple-950);
+  --color-purple-900: var(--fintech-purple-900);
+  --color-cyan-500: var(--cyber-cyan-500);
+  --color-cyan-400: var(--cyber-cyan-400);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
   }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.5);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyber-cyan-400) var(--fintech-purple-800);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fintech-purple-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cyber-cyan-600);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cyber-cyan-400);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Base custom container (this fixes the layout issues) */
+.container-custom {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .container-custom {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-custom {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+  background: rgba(15, 12, 48, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15);
+}
+
+.glass-panel {
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.7) 0%, rgba(15, 12, 48, 0.9) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+  border-top: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+/* Typography elements */
+.font-display {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--cyber-cyan-400), var(--fintech-purple-400));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: linear-gradient(135deg, var(--gold-pulse-400), #ff8c00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Text animations */
+.text-shimmer {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.5) 0%, rgba(0, 212, 255, 1) 25%, rgba(255, 215, 0, 1) 50%, rgba(0, 212, 255, 1) 75%, rgba(0, 212, 255, 0.5) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Floating label inputs */
+.form-input {
+  background: rgba(30, 27, 75, 0.5);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  color: var(--text-primary);
+  border-radius: 12px;
+  padding: 14px 18px;
+  width: 100%;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+}
+
+.form-input:focus {
+  border-color: var(--cyber-cyan-400);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+  background: rgba(30, 27, 75, 0.8);
+}
+
+.form-input.error {
+  border-color: #ff4757;
+}
+
+.form-input::placeholder {
+  color: rgba(200, 200, 255, 0.4);
 }
