@@ -75,7 +75,7 @@ const InputField = ({
     label, id, error, type = "text", ...props
 }: {
     label: string; id: string; error?: string; type?: string;
-    [key: string]: string | undefined;
+    [key: string]: any;
 }) => (
     <div>
         <label className="block text-sm font-medium mb-1.5" style={{ color: "rgba(200,200,255,0.8)" }} htmlFor={id}>
