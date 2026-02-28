@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import ClientLayout from "@/components/ui/ClientLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -82,7 +83,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="antialiased bg-[#0a0820] text-[#f0f0ff] overflow-x-hidden">
-        {children}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );

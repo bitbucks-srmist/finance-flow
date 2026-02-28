@@ -3,18 +3,20 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Zap } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navLinks = [
-    { href: "#about", label: "About" },
-    { href: "#focus-areas", label: "Focus Areas" },
-    { href: "#schedule", label: "Schedule" },
-    { href: "#judges", label: "Judges" },
-    { href: "#faq", label: "FAQ" },
+    { href: "/about", label: "About" },
+    { href: "/focus-areas", label: "Focus Areas" },
+    { href: "/schedule", label: "Schedule" },
+    { href: "/judges", label: "Judges" },
+    { href: "/faq", label: "FAQ" },
 ];
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -22,18 +24,11 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const handleNavClick = (href: string) => {
-        setMobileOpen(false);
-        const el = document.querySelector(href);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-    };
-
     return (
         <>
             <motion.nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-                    scrolled ? "bg-[#0a0820]/90 backdrop-blur-md border-b border-cyan-500/20 shadow-lg" : "bg-transparent"
-                }`}
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0a0820]/90 backdrop-blur-md border-b border-cyan-500/20 shadow-lg" : "bg-transparent"
+                    }`}
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -44,10 +39,10 @@ export default function Navbar() {
                         <Link
                             href="/"
                             className="flex items-center gap-2 group"
-                            onClick={(e) => { 
+                            onClick={(e) => {
                                 if (window.location.pathname === '/') {
-                                    e.preventDefault(); 
-                                    window.scrollTo({ top: 0, behavior: "smooth" }); 
+                                    e.preventDefault();
+                                    window.scrollTo({ top: 0, behavior: "smooth" });
                                 }
                             }}
                         >
@@ -61,26 +56,35 @@ export default function Navbar() {
 
                         {/* Desktop nav */}
                         <div className="hidden md:flex items-center gap-8">
-                            {navLinks.map((link) => (
-                                <button
-                                    key={link.href}
-                                    onClick={() => handleNavClick(link.href)}
-                                    className="text-sm font-medium text-purple-100/70 hover:text-cyan-400 transition-colors duration-300 relative group"
-                                >
-                                    {link.label}
-                                    <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full bg-gradient-to-r from-cyan-400 to-purple-600" />
-                                </button>
-                            ))}
+                            {navLinks.map((link) => {
+                                const isActive = pathname === link.href;
+                                return (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className={`text-sm font-medium transition-colors duration-300 relative group ${isActive
+                                                ? "text-cyan-400"
+                                                : "text-purple-100/70 hover:text-cyan-400"
+                                            }`}
+                                    >
+                                        {link.label}
+                                        <span
+                                            className={`absolute -bottom-1 left-0 h-px transition-all duration-300 bg-gradient-to-r from-cyan-400 to-purple-600 ${isActive ? "w-full" : "w-0 group-hover:w-full"
+                                                }`}
+                                        />
+                                    </Link>
+                                );
+                            })}
                         </div>
 
                         {/* Desktop CTA */}
                         <div className="hidden md:flex items-center gap-3">
-                            <button
-                                onClick={() => handleNavClick("#registration")}
+                            <Link
+                                href="/#registration"
                                 className="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-br from-cyan-500 to-purple-600 hover:shadow-[0_0_20px_rgba(0,212,255,0.4)] transition-all duration-300 transform hover:scale-105 active:scale-95"
                             >
                                 Register Now
-                            </button>
+                            </Link>
                         </div>
 
                         {/* Mobile hamburger */}
@@ -115,27 +119,41 @@ export default function Navbar() {
                             exit={{ x: "100%" }}
                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                         >
-                            {navLinks.map((link, i) => (
-                                <motion.button
-                                    key={link.href}
-                                    onClick={() => handleNavClick(link.href)}
-                                    className="w-full text-left px-4 py-3.5 rounded-xl font-medium text-purple-100/80 bg-cyan-500/5 border border-cyan-500/10 hover:bg-cyan-500/15 hover:border-cyan-500/40 hover:text-cyan-400 transition-all"
-                                    initial={{ x: 40, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: i * 0.05 }}
-                                >
-                                    {link.label}
-                                </motion.button>
-                            ))}
-                            <motion.button
-                                onClick={() => handleNavClick("#registration")}
-                                className="w-full px-4 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-br from-cyan-500 to-purple-600 shadow-[0_0_15px_rgba(0,212,255,0.3)] mt-4 active:scale-95 transition-transform"
+                            {navLinks.map((link, i) => {
+                                const isActive = pathname === link.href;
+                                return (
+                                    <motion.div
+                                        key={link.href}
+                                        initial={{ x: 40, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: i * 0.05 }}
+                                    >
+                                        <Link
+                                            href={link.href}
+                                            onClick={() => setMobileOpen(false)}
+                                            className={`block w-full text-left px-4 py-3.5 rounded-xl font-medium transition-all ${isActive
+                                                    ? "text-cyan-400 bg-cyan-500/15 border border-cyan-500/40"
+                                                    : "text-purple-100/80 bg-cyan-500/5 border border-cyan-500/10 hover:bg-cyan-500/15 hover:border-cyan-500/40 hover:text-cyan-400"
+                                                }`}
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </motion.div>
+                                );
+                            })}
+                            <motion.div
                                 initial={{ x: 40, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: 0.3 }}
                             >
-                                Register Now ⚡
-                            </motion.button>
+                                <Link
+                                    href="/#registration"
+                                    onClick={() => setMobileOpen(false)}
+                                    className="block w-full px-4 py-3.5 rounded-xl font-semibold text-white text-center bg-gradient-to-br from-cyan-500 to-purple-600 shadow-[0_0_15px_rgba(0,212,255,0.3)] mt-4 active:scale-95 transition-transform"
+                                >
+                                    Register Now ⚡
+                                </Link>
+                            </motion.div>
                         </motion.div>
                     </>
                 )}
